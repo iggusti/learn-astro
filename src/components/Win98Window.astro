@@ -1,0 +1,178 @@
+---
+/**
+ * Win98Window.astro
+ * A wrapper component that displays content inside a Windows 98-style window.
+ *
+ * Props:
+ *  - title: string        — window title shown in the title bar
+ *  - icon?: string        — emoji/character icon next to the title (optional)
+ *  - width?: string       — window width, default '600px'
+ *  - showMinMax?: boolean — show minimize/maximize buttons, default true
+ *  - statusText?: string  — text shown in the bottom status bar (optional)
+ */
+
+export interface Props {
+  title: string;
+  icon?: string;
+  width?: string;
+  showMinMax?: boolean;
+  statusText?: string;
+}
+
+const {
+  title,
+  icon = '🗒️',
+  width = '600px',
+  showMinMax = true,
+  statusText,
+} = Astro.props;
+---
+
+<div class="win98-window" style={`width: ${width}; max-width: 100%;`}>
+  <!-- Title Bar -->
+  <div class="win98-titlebar">
+    <div class="win98-titlebar-left">
+      <span class="win98-titlebar-icon">{icon}</span>
+      <span class="win98-titlebar-title">{title}</span>
+    </div>
+    <div class="win98-titlebar-buttons">
+      {showMinMax && (
+        <>
+          <button class="win98-titlebar-btn" title="Minimize" aria-label="Minimize" type="button">_</button>
+          <button class="win98-titlebar-btn" title="Maximize" aria-label="Maximize" type="button">□</button>
+        </>
+      )}
+      <button class="win98-titlebar-btn win98-close-btn" title="Close" aria-label="Close" type="button">✕</button>
+    </div>
+  </div>
+
+  <!-- Menu Bar slot (optional) -->
+  <slot name="menu-bar" />
+
+  <!-- Window Content -->
+  <div class="win98-content">
+    <slot />
+  </div>
+
+  <!-- Status Bar (optional) -->
+  {statusText !== undefined && (
+    <div class="win98-statusbar">
+      <div class="win98-statusbar-panel">
+        <span id="win98-status-text">{statusText}</span>
+      </div>
+      <div class="win98-statusbar-panel win98-statusbar-panel--sm">
+        <span id="win98-status-count"></span>
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .win98-window {
+    background-color: var(--win98-gray);
+    /* Raised window border */
+    box-shadow:
+      inset -1px -1px 0 var(--win98-btn-dark-shadow),
+      inset 1px 1px 0 var(--win98-btn-highlight),
+      inset -2px -2px 0 var(--win98-btn-shadow),
+      inset 2px 2px 0 var(--win98-white);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---- Title Bar ---- */
+  .win98-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to right, var(--win98-blue), #1084d0);
+    padding: 2px 3px;
+    height: 22px;
+    user-select: none;
+  }
+
+  .win98-titlebar-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .win98-titlebar-icon {
+    font-size: 13px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .win98-titlebar-title {
+    color: var(--win98-white);
+    font-weight: bold;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .win98-titlebar-buttons {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .win98-titlebar-btn {
+    width: 16px;
+    height: 14px;
+    font-size: 9px;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--win98-btn-face);
+    color: var(--win98-black);
+    cursor: pointer;
+    border: none;
+    box-shadow:
+      inset -1px -1px 0 var(--win98-btn-dark-shadow),
+      inset 1px 1px 0 var(--win98-btn-highlight),
+      inset -2px -2px 0 var(--win98-btn-shadow),
+      inset 2px 2px 0 var(--win98-white);
+  }
+
+  .win98-titlebar-btn:active {
+    box-shadow:
+      inset 1px 1px 0 var(--win98-btn-dark-shadow),
+      inset -1px -1px 0 var(--win98-btn-highlight),
+      inset 2px 2px 0 var(--win98-btn-shadow),
+      inset -2px -2px 0 var(--win98-white);
+  }
+
+  /* ---- Content Area ---- */
+  .win98-content {
+    padding: 8px;
+    flex: 1;
+  }
+
+  /* ---- Status Bar ---- */
+  .win98-statusbar {
+    display: flex;
+    align-items: stretch;
+    padding: 2px 3px;
+    gap: 2px;
+    border-top: 1px solid var(--win98-btn-shadow);
+  }
+
+  .win98-statusbar-panel {
+    flex: 1;
+    padding: 1px 4px;
+    font-size: 11px;
+    box-shadow:
+      inset 1px 1px 0 var(--win98-btn-shadow),
+      inset -1px -1px 0 var(--win98-btn-highlight);
+  }
+
+  .win98-statusbar-panel--sm {
+    flex: 0 0 120px;
+    text-align: right;
+  }
+</style>

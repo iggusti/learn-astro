@@ -19,17 +19,177 @@ const { title } = Astro.props;
 		<slot />
 	</body>
 </html>
+
 <style is:global>
+	/* ===== Windows 98 Global Styles ===== */
 	:root {
-		--accent: 124, 58, 237;
-		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
+		--win98-bg: #008080;          /* Teal desktop background */
+		--win98-gray: #c0c0c0;        /* Silver / button face */
+		--win98-dark: #808080;        /* Dark gray */
+		--win98-darker: #404040;      /* Darker gray */
+		--win98-white: #ffffff;
+		--win98-black: #000000;
+		--win98-blue: #000080;        /* Navy blue title bar */
+		--win98-title-text: #ffffff;
+		--win98-btn-face: #c0c0c0;
+		--win98-btn-shadow: #808080;
+		--win98-btn-highlight: #ffffff;
+		--win98-btn-dark-shadow: #404040;
+		--win98-selection: #000080;
+		--win98-selection-text: #ffffff;
 	}
-	html {
-		font-family: system-ui, sans-serif;
-		background-color: #F6F6F6;
+
+	* {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
 	}
-	code {
-		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-			Bitstream Vera Sans Mono, Courier New, monospace;
+
+	html, body {
+		width: 100%;
+		min-height: 100vh;
+		font-family: 'MS Sans Serif', 'Tahoma', 'Arial', sans-serif;
+		font-size: 11px;
+		background-color: var(--win98-bg);
+		color: var(--win98-black);
+	}
+
+	/* Windows 98 Button Style */
+	.btn-98 {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
+		padding: 3px 10px;
+		min-width: 75px;
+		min-height: 23px;
+		background-color: var(--win98-btn-face);
+		color: var(--win98-black);
+		font-family: inherit;
+		font-size: 11px;
+		cursor: pointer;
+		border: none;
+		outline: none;
+		user-select: none;
+		/* Raised border effect */
+		box-shadow:
+			inset -1px -1px 0 var(--win98-btn-dark-shadow),
+			inset 1px 1px 0 var(--win98-btn-highlight),
+			inset -2px -2px 0 var(--win98-btn-shadow),
+			inset 2px 2px 0 var(--win98-white);
+	}
+
+	.btn-98:active {
+		box-shadow:
+			inset 1px 1px 0 var(--win98-btn-dark-shadow),
+			inset -1px -1px 0 var(--win98-btn-highlight),
+			inset 2px 2px 0 var(--win98-btn-shadow),
+			inset -2px -2px 0 var(--win98-white);
+		padding-top: 4px;
+		padding-left: 11px;
+	}
+
+	.btn-98:disabled {
+		color: var(--win98-dark);
+		cursor: not-allowed;
+	}
+
+	.btn-98.btn-primary {
+		font-weight: bold;
+	}
+
+	/* Windows 98 Input Style */
+	.input-98 {
+		padding: 2px 4px;
+		font-family: inherit;
+		font-size: 11px;
+		background-color: var(--win98-white);
+		color: var(--win98-black);
+		border: none;
+		outline: none;
+		/* Sunken border effect */
+		box-shadow:
+			inset 1px 1px 0 var(--win98-btn-shadow),
+			inset -1px -1px 0 var(--win98-btn-highlight),
+			inset 2px 2px 0 var(--win98-btn-dark-shadow),
+			inset -2px -2px 0 var(--win98-white);
+	}
+
+	.input-98:focus {
+		outline: 1px dotted var(--win98-black);
+		outline-offset: -2px;
+	}
+
+	/* Checkbox Windows 98 Style */
+	.checkbox-98 {
+		appearance: none;
+		-webkit-appearance: none;
+		width: 13px;
+		height: 13px;
+		background-color: var(--win98-white);
+		box-shadow:
+			inset 1px 1px 0 var(--win98-btn-shadow),
+			inset -1px -1px 0 var(--win98-btn-highlight),
+			inset 2px 2px 0 var(--win98-btn-dark-shadow);
+		cursor: pointer;
+		flex-shrink: 0;
+		position: relative;
+	}
+
+	.checkbox-98:checked::after {
+		content: '✓';
+		position: absolute;
+		top: -3px;
+		left: 1px;
+		font-size: 13px;
+		font-weight: bold;
+		color: var(--win98-black);
+		line-height: 1;
+	}
+
+	/* Scrollbar Windows 98 style */
+	::-webkit-scrollbar {
+		width: 16px;
+		height: 16px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: var(--win98-gray);
+		box-shadow: inset 1px 1px 0 var(--win98-btn-dark-shadow);
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: var(--win98-btn-face);
+		box-shadow:
+			inset -1px -1px 0 var(--win98-btn-dark-shadow),
+			inset 1px 1px 0 var(--win98-btn-highlight),
+			inset -2px -2px 0 var(--win98-btn-shadow),
+			inset 2px 2px 0 var(--win98-white);
+	}
+
+	/* Text selection */
+	::selection {
+		background-color: var(--win98-selection);
+		color: var(--win98-selection-text);
+	}
+
+	/* Separator / HR */
+	.separator-98 {
+		border: none;
+		border-top: 1px solid var(--win98-btn-shadow);
+		border-bottom: 1px solid var(--win98-btn-highlight);
+		margin: 4px 0;
+	}
+
+	/* Status bar text */
+	.status-bar-text {
+		font-size: 11px;
+		color: var(--win98-black);
+	}
+
+	/* Strikethrough for completed tasks */
+	.text-strikethrough {
+		text-decoration: line-through;
+		color: var(--win98-dark);
 	}
 </style>

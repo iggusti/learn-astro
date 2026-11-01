@@ -1,50 +1,116 @@
-# Welcome to [Astro](https://astro.build)
+# 🗒️ To Do List – Windows 98 Style
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/withastro/astro/tree/latest/examples/basics)
+A task management app built with **Astro**, featuring a **Windows 98**-style interface with support for two languages (English / Indonesian).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+---
 
-![basics](https://user-images.githubusercontent.com/4677417/186188965-73453154-fdec-4d6b-9c34-cb35c248ae5b.png)
+## ✨ Features
 
+- **Full CRUD** — add, edit, toggle completion, delete individual items, delete all completed
+- **Filter** — All / Active / Completed
+- **Sort** — Newest, Oldest, Priority, A → Z
+- **Task priorities** — 🔴 High, 🟡 Medium, 🔵 Low
+- **i18n** — 🇺🇸 English (default) + 🇮🇩 Indonesia, persisted in `localStorage`
+- **Toast notifications** — feedback for every CRUD action
+- **Confirm dialog** — confirmation before deletion
+- **Dummy data** — 5 pre-loaded tasks, persisted via `localStorage`
+- **Status bar** — counter for total / pending / done
+- **API-ready** — service layer is abstracted; just swap `localStorage` for `fetch()`
+
+---
 
 ## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
 
 ```
 /
 ├── public/
-│   └── favicon.svg
+│   └── favicon.svg                  ← Windows 98 pixel art icon
 ├── src/
 │   ├── components/
-│   │   └── Card.astro
+│   │   ├── Win98Window.astro        ← Windows 98 window component
+│   │   └── TaskItem.astro           ← Reusable todo item component
+│   ├── i18n/
+│   │   └── translations.ts          ← UI strings in English & Indonesian
 │   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
+│   │   └── Layout.astro             ← Global Windows 98 CSS
+│   ├── pages/
+│   │   └── index.astro              ← Main page (CRUD + i18n + filtering)
+│   └── services/
+│       └── todoService.ts           ← Service layer (dummy data → API-ready)
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
+---
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+Run all commands from the project root:
 
-| Command                | Action                                             |
-| :--------------------- | :------------------------------------------------- |
-| `npm install`          | Installs dependencies                              |
-| `npm run dev`          | Starts local dev server at `localhost:3000`        |
-| `npm run build`        | Build your production site to `./dist/`            |
-| `npm run preview`      | Preview your build locally, before deploying       |
-| `npm run astro ...`    | Run CLI commands like `astro add`, `astro preview` |
-| `npm run astro --help` | Get help using the Astro CLI                       |
+| Command               | Action                                        |
+| :-------------------- | :-------------------------------------------- |
+| `npm install`         | Install dependencies                          |
+| `npm run dev`         | Start dev server at `localhost:4321`          |
+| `npm run build`       | Build production output to `./dist/`          |
+| `npm run preview`     | Preview the production build locally          |
+| `npm run astro ...`   | Run the Astro CLI, e.g. `astro add`          |
 
-## 👀 Want to learn more?
+> **Note:** Requires **Node.js >= 22.23.4** (matching Astro 7.x requirements).
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+---
+
+## 🔌 Migrating to a Backend API
+
+Data is currently stored in `localStorage` (client-side). When the backend is ready, simply replace the implementation in `src/services/todoService.ts` without touching any components or pages.
+
+Example migration:
+
+```ts
+// Before (dummy / localStorage)
+getAll(): Todo[] {
+  return loadFromStorage();
+}
+
+// After (fetch to API)
+async getAll(): Promise<Todo[]> {
+  const res = await fetch(`${import.meta.env.PUBLIC_API_URL}/todos`);
+  if (!res.ok) throw new Error('Failed to fetch todos');
+  return res.json();
+}
+```
+
+Endpoints to prepare on the backend:
+
+| Method   | Endpoint                    | Description               |
+| :------- | :-------------------------- | :------------------------ |
+| `GET`    | `/api/todos`                | Fetch all todos           |
+| `GET`    | `/api/todos/:id`            | Fetch a single todo       |
+| `POST`   | `/api/todos`                | Create a new todo         |
+| `PATCH`  | `/api/todos/:id`            | Update a todo (partial)   |
+| `DELETE` | `/api/todos/:id`            | Delete a single todo      |
+| `DELETE` | `/api/todos/completed`      | Delete all completed todos|
+
+Add the backend URL to a `.env` file:
+
+```env
+PUBLIC_API_URL=http://localhost:3001
+```
+
+---
+
+## 🌐 Language / Bahasa
+
+Click the language button in the menu bar to switch languages. The selection is saved automatically.
+
+| Code  | Language              |
+| :---- | :-------------------- |
+| `en`  | 🇺🇸 English (default) |
+| `id`  | 🇮🇩 Indonesia        |
+
+---
+
+## 🛠️ Tech Stack
+
+- [Astro](https://astro.build) v7
+- TypeScript
+- CSS (hand-crafted Windows 98 styles, no external library)
+- localStorage (temporary data layer)
